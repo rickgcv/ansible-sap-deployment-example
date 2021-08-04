@@ -33,7 +33,7 @@
 
 
 - name: fail over (secondary)
-  hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_secondary"
+  #hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_secondary"
 
   tasks:
     - name: set maintenance off
