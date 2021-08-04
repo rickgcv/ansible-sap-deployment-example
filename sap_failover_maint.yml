@@ -1,7 +1,7 @@
 ---
 
 - name: assign groups
-  hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana"
+#  hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana"
   gather_facts: yes
   tasks:
     - name: find hana role
@@ -33,7 +33,7 @@
 
 
 - name: check replication status (primary)
-  hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_primary"
+  #hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_primary"
   gather_facts: no
   become: yes
   become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
@@ -54,7 +54,7 @@
       when: (replication_status.stdout != 'ACTIVE')
 
 - name: set to maintenance mode (secondary)
-  hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_secondary"
+  #hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_secondary"
   gather_facts: no
   tasks:
     - name: set to maintenance
@@ -72,7 +72,7 @@
 
 
 - name: unregister secondary (secondary)
-  hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_secondary"
+  #hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_secondary"
   become: yes
   become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
   become_method: su
@@ -110,7 +110,7 @@
 
 
 - name: upgrade (secondary)
-  hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_secondary"
+#  hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_secondary"
 
   roles:
     - role: oatakan.rhel_upgrade
@@ -172,7 +172,7 @@
 
 
 - name: wait for system replication (primary)
-  hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_primary"
+  #hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_primary"
 
   tasks:
     - name: wait until system replication status is active
@@ -210,7 +210,7 @@
 
 
 - name: fail over (secondary)
-  hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_secondary"
+  #hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_secondary"
   pre_tasks:
     - name: set new primary hana server ip
       add_host:
@@ -278,7 +278,7 @@
       become_method: su
 
 - name: move the vip on s4app
-  hosts: "tag_app_sap_hana_ha_demo:&tag_role_s4app"
+ # hosts: "tag_app_sap_hana_ha_demo:&tag_role_s4app"
   vars:
     # this a temporary measure before implementing real vip
     sap_hana_vip: "{{ hostvars['hana_primary']['ip_address'] }}"
@@ -286,7 +286,7 @@
     - s4-hosts
 
 - name: upgrade (primary)
-  hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_primary"
+ # hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_primary"
   pre_tasks:
     - name: set to maintenance
       command: pcs property set maintenance-mode=true
@@ -394,7 +394,7 @@
       become_method: su
 
 - name: wait for system replication (secondary)
-  hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_secondary"
+ # hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana:&hana_secondary"
   become: yes
   become_user: "{{ sap_hana_deployment_hana_sid | lower }}adm"
   become_method: su
