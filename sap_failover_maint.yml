@@ -2,6 +2,7 @@
 
 - name: assign groups
 #  hosts: "tag_app_sap_hana_ha_demo:&tag_role_hana"
+  hosts: "hanadb01:&hanadb02"
   gather_facts: yes
   tasks:
     - name: find hana role
